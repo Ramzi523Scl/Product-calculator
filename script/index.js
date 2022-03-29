@@ -46,7 +46,40 @@ const createRowForTable = () => {
 const createCell = (className) => {
   let td = document.createElement("td");
   td.classList.add(className);
+  let isRemoveAndCost = className === "remove" || className === "cost";
+  if (!isRemoveAndCost) td.addEventListener("dblclick", editValueCell);
+
   return td;
+};
+
+function editValueCell(event) {
+  let cell = this;
+  let valueCell = cell.innerHTML;
+
+  cell.innerHTML = `<input value = "${valueCell}"/>`;
+  let input = cell.querySelector("input");
+  input.addEventListener("keypress", saveValueCell);
+
+  console.log(event.target, this);
+}
+
+function saveValueCell(event) {
+  let enter = event.key === "Enter";
+  if (enter) {
+    let cell = this.parentElement;
+    let tr = cell.parentElement;
+    let newValueCell = this.value;
+    cell.innerHTML = newValueCell;
+
+    let costCell = tr.querySelector(".cost");
+    costCell.innerHTML = getNewValueCost(tr);
+    getTotalCostOfProducts();
+  }
+}
+const getNewValueCost = (tr) => {
+  let priceCell = tr.querySelector(".price");
+  let amountCell = tr.querySelector(".amount");
+  return priceCell.innerHTML * amountCell.innerHTML;
 };
 
 const addValueInTableRow = (tr, values) => {
