@@ -18,6 +18,8 @@ function addProductInTable(event) {
     let stuffedTr = addValueInTableRow(emptyTr, fieldsArr);
     table.append(stuffedTr);
     clearFields(fieldsArr);
+
+    getTotalCostOfProducts();
   }
 }
 const checkEmptyFiends = (text) => {
@@ -58,4 +60,13 @@ const clearFields = (fields) => {
   name.value = null;
   price.value = null;
   amount.value = null;
+};
+
+const getTotalCostOfProducts = () => {
+  let totalCost = 0;
+  let costCells = table.querySelectorAll("tr .cost");
+  for (let cell of costCells) {
+    totalCost += Number(cell.innerHTML);
+  }
+  total.innerHTML = totalCost;
 };
