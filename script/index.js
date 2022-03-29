@@ -48,7 +48,8 @@ const createCell = (className) => {
   td.classList.add(className);
   let isRemoveAndCost = className === "remove" || className === "cost";
   if (!isRemoveAndCost) td.addEventListener("dblclick", editValueCell);
-
+  else if (className === "remove")
+    td.addEventListener("click", removeRowInTable);
   return td;
 };
 
@@ -59,8 +60,6 @@ function editValueCell(event) {
   cell.innerHTML = `<input value = "${valueCell}"/>`;
   let input = cell.querySelector("input");
   input.addEventListener("keypress", saveValueCell);
-
-  console.log(event.target, this);
 }
 
 function saveValueCell(event) {
@@ -81,7 +80,11 @@ const getNewValueCost = (tr) => {
   let amountCell = tr.querySelector(".amount");
   return priceCell.innerHTML * amountCell.innerHTML;
 };
-
+function removeRowInTable(event) {
+  let tr = this.parentElement;
+  tr.remove();
+  getTotalCostOfProducts();
+}
 const addValueInTableRow = (tr, values) => {
   let tds = tr.querySelectorAll("td");
   for (let i = 0; i < tds.length; i++) {
